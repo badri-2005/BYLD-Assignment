@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 // Swagger UI setup BEFORE routes
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(routes);
 

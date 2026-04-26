@@ -1,9 +1,4 @@
-/**
- * Integration Tests for Holdings & P&L Calculations
- * 
- * Uses Testcontainers to run against a real PostgreSQL database.
- * Tests the complete flow: database operations + P&L calculations.
- */
+
 
 import Decimal from 'decimal.js';
 import { PostgreSqlContainer } from 'testcontainers';
@@ -19,7 +14,6 @@ let portfolioId = '550e8400-e29b-41d4-a716-446655440001';
 describe('Integration Tests: Holdings & P&L (Real PostgreSQL)', () => {
   
   beforeAll(async () => {
-    // Start PostgreSQL container
     container = await new PostgreSqlContainer()
       .withDatabase('test_portfolio')
       .withUsername('postgres')
@@ -28,7 +22,6 @@ describe('Integration Tests: Holdings & P&L (Real PostgreSQL)', () => {
 
     const connectionString = container.getConnectionUri();
     
-    // Initialize Knex with container database
     testKnex = knex({
       client: 'pg',
       connection: connectionString,

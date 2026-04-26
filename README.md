@@ -216,9 +216,31 @@ git clone https://github.com/badri-2005/BYLD-Assignment.git
 cd BYLD-Assignment
 ```
 
+### Configure Environment Variables
+
+Copy the example environment file and update it with your configuration:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your actual values:
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=portfolio_db
+DB_USER=postgres
+DB_PASSWORD=your_secure_password
+PORT=3000
+```
+
+⚠️ **Important**: Never commit `.env` to version control. See [SECURITY.md](SECURITY.md) for security best practices.
+
 ---
 
 ## One Command to Run
+
+For Docker deployment:
 
 ```bash
 docker compose up --build
@@ -236,7 +258,14 @@ This command:
 ## Setup (Local Development)
 
 ```bash
+# Install dependencies
 npm install
+
+# Create .env from template
+cp .env.example .env
+
+# Update .env with your database credentials
+# Then start the server
 npm run dev
 ```
 
@@ -249,25 +278,43 @@ Ensure PostgreSQL is running locally before starting the server.
 Swagger UI is available at:
 
 ```
-http://localhost:3000/api-docs/
+http://localhost:3000/swagger-ui/
 ```
 
 ---
 
 ## Environment Variables
 
-Create a `.env` file using `.env.example` as a reference.
+All configuration is managed through environment variables in the `.env` file.
 
-**Important:** Update the values according to your system configuration.
+### Setup Your Environment File
 
+1. Copy the example file:
+```bash
+cp .env.example .env
+```
+
+2. Update `.env` with your actual values:
 ```env
 PORT=3000
-DB_HOST=db
+DB_HOST=localhost          # Use 'db' when running in Docker
 DB_PORT=5432
 DB_NAME=portfolio_db
 DB_USER=postgres
-DB_PASSWORD=postgres
+DB_PASSWORD=your_secure_password
+NODE_ENV=development
 ```
+
+### Security Best Practices
+
+⚠️ **NEVER commit `.env` to version control**
+
+- The `.env` file contains database credentials and secrets
+- `.gitignore` is configured to exclude `.env` files
+- Only `.env.example` is committed (with placeholder values)
+- Each developer creates their own `.env` from `.env.example`
+
+For detailed security guidelines, see [SECURITY.md](SECURITY.md)
 
 ---
 

@@ -13,7 +13,7 @@
 ### 1. Backend Structure Design
 
 **Prompt**:
-"Give me structured backend code for Node.js Express with proper folder structure"
+"Give me structured backend  for Node.js Express with proper folder structure"
 
 **What AI Produced**:
 A layered architecture with routes → controllers → services → db separation.
