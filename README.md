@@ -1,148 +1,319 @@
-# Portfolio & SIP Management API
-
-This is a Node.js backend application built with Express and Knex for managing investment portfolios, holdings, and Systematic Investment Plans (SIPs). Node.js is my primary framework of expertise, and I've leveraged its event-driven, non-blocking I/O model to build scalable financial services.
+# BYLD Backend Assignment (Variant A)
 
 ## Overview
 
-A comprehensive REST API for:
-- **Portfolio Management**: Create and manage investment portfolios
-- **Holdings Tracking**: Monitor stock holdings with cost basis calculations
-- **Transactions**: Record buy/sell transactions with decimal precision
-- **SIPs**: Automated investment scheduling (weekly/monthly execution)
-- **Wallet**: Manage portfolio cash balance
+This project is built using Node.js and Express.js to implement a Portfolio API for managing investments, transactions, and automated SIPs.
 
-## Tech Stack
+This implementation follows Variant A — SIPs, which includes:
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: PostgreSQL with Knex.js (query builder)
-- **Scheduling**: node-cron for automated SIP execution
-- **Precision**: decimal.js for accurate financial calculations
-- **Validation**: Joi schemas
-- **API Docs**: OpenAPI/Swagger
+* SIP creation and management
+* Automated execution using a cron job
+* Integration with transaction logic (BUY operations)
 
-## Project Structure
-
-```
-src/
-├── controllers/      # Request handlers
-├── services/         # Business logic
-├── db/              # Database queries
-├── routes/          # API endpoints
-├── migrations/      # Database schema versions
-├── middleware/      # Express middleware (logging, error handling)
-├── schemas/         # Request validation schemas
-├── config/          # Configuration (DB, scheduler, swagger)
-└── utils/           # Helper utilities
-```
-
-## Running the Application
-
-```bash
-# Install dependencies
-npm install
-
-# Start PostgreSQL via Docker
-docker compose up -d
-
-# Run migrations
-npx knex migrate:latest
-
-# Start server
-npm run dev
-```
-
-Server runs on `http://localhost:3000`
-
-## Key Features
-
-### Decimal Precision
-Uses `decimal.js` for all financial calculations to avoid floating-point errors:
-- Average cost calculations
-- Portfolio balance updates
-- Transaction amounts
-
-### SIP Automation
-- Automated scheduling via node-cron (runs every minute)
-- Supports WEEKLY and MONTHLY cadences
-- Skips execution if insufficient balance
-- Updates `next_run_at` for future scheduling
-
-### Transaction Integrity
-- Database transactions ensure atomicity
-- Prevents race conditions on balance updates
-- Maintains holdings consistency
-
-## API Endpoints
-
-### Portfolios
-- `POST /v1/portfolios` - Create portfolio
-- `GET /v1/portfolios/:id` - Get portfolio details
-- `GET /v1/portfolios/:id/holdings` - List holdings
-
-### SIPs
-- `POST /v1/portfolios/:id/sips` - Create SIP
-- `GET /v1/portfolios/:id/sips` - List SIPs
-- `DELETE /v1/portfolios/:id/sips/:sipId` - Cancel SIP
-
-### Transactions
-- `POST /v1/portfolios/:id/transactions` - Record transaction
-- `GET /v1/portfolios/:id/transactions` - List transactions
+The focus of this project is correct financial calculations, clean architecture, and reproducibility.
 
 ---
 
-## What I'd Do With 2 More Days
+## Tech Stack
 
-### 1. **Input Validation & Error Handling** (1 day)
-**Trade-off Made**: Currently using basic try-catch blocks
-- **Would Add**: Comprehensive Joi schema validation on all endpoints
-- **Why It Matters**: Prevents invalid data (negative amounts, invalid symbols) from reaching the database
-- **Cost of Not Having It**: User sees generic 500 errors instead of descriptive validation messages
+| Component        | Technology              |
+| ---------------- | ----------------------- |
+| Runtime          | Node.js (v20 LTS)       |
+| Framework        | Express.js              |
+| Database         | PostgreSQL              |
+| Query Builder    | Knex.js                 |
+| Money Math       | decimal.js              |
+| Validation       | Zod                     |
+| Scheduling       | node-cron               |
+| Containerization | Docker + Docker Compose |
+| API Docs         | Swagger (OpenAPI)       |
 
-### 2. **Database Connection Pooling & Query Optimization** (0.5 days)
-**Trade-off Made**: Using default Knex connection settings
-- **Would Add**: 
-  - Tune connection pool size based on load testing
-  - Add database indexes on frequently queried columns (portfolio_id, symbol, status)
-  - Implement query result caching for company data
-- **Why It Matters**: Prevents connection exhaustion under high load
-- **Cost of Not Having It**: Performance degrades as concurrent requests increase
+---
 
-### 3. **Unit & Integration Tests** (1.5 days)
-**Trade-off Made**: Only manual testing via curl
-- **Would Add**:
-  - Unit tests for service layer business logic (decimal calculations, balance updates)
-  - Integration tests for API endpoints
-  - Tests for edge cases (insufficient balance, portfolio not found, duplicate SIP cancellation)
-- **Why It Matters**: Ensures refactoring doesn't break existing functionality
-- **Cost of Not Having It**: Risk of regression bugs in critical financial operations
+## Why Knex instead of Flyway?
 
-### 4. **Audit Logging & Request Tracing** (0.5 days)
-**Trade-off Made**: Basic logger middleware exists but doesn't track financial transactions
-- **Would Add**:
-  - Detailed audit logs for every transaction (who, what, when)
-  - Request ID propagation through entire call stack for debugging
-  - Separate audit table for compliance/forensics
-- **Why It Matters**: Critical for financial applications (regulatory compliance, fraud detection)
-- **Cost of Not Having It**: Cannot trace why portfolio balance changed or investigate discrepancies
+Knex.js is used as a Node.js-native alternative to Flyway because:
 
-### 5. **Rate Limiting & Authentication** (0.5 days)
-**Trade-off Made**: No auth or rate limiting implemented
-- **Would Add**:
-  - JWT authentication for portfolio ownership verification
-  - Rate limiting per API key/user to prevent abuse
-  - Portfolio isolation (users can only access their own portfolios)
-- **Why It Matters**: Prevents unauthorized access and API abuse
-- **Cost of Not Having It**: Any user can modify any portfolio
+* It supports versioned migrations
+* Automatically tracks applied migrations
+* Allows rollback support
+* Integrates well with JavaScript projects
 
-### Summary of Key Trade-offs
+---
 
-| Aspect | Current | Trade-off |
-|--------|---------|-----------|
-| **Validation** | Minimal | Speed to MVP vs. data integrity |
-| **Testing** | Manual only | Speed vs. regression risk |
-| **Monitoring** | Basic logs | Speed vs. production visibility |
-| **Security** | None | MVP scope vs. data protection |
-| **Performance** | Not optimized | MVP vs. scale readiness |
+## Folder Structure
 
-The current implementation prioritizes **speed to working MVP** over production-ready robustness. For a 2-day extension, I'd focus on validation and testing first (highest ROI for reliability), then monitoring for operations visibility.
+```text
+src/
+│
+├── app.js                 → Express app setup
+├── server.js              → Entry point (runs migrations and starts server)
+│
+├── config/
+│   ├── knex.js            → Database connection
+│   └── scheduler.js       → SIP cron job
+│
+├── routes/                → API route definitions
+├── controllers/           → Request/response handling
+├── services/              → Business logic
+├── db/                    → Database queries
+├── utils/                 → Helper functions
+├── schemas/               → Validation schemas
+├── migrations/            → Database schema setup
+```
+
+---
+
+## Features Implemented
+
+### Portfolio
+
+* Create, fetch, and delete portfolios
+* Maintains cash_balance
+
+### Wallet
+
+* Deposit money into portfolio
+* Validates amount
+
+### Transactions
+
+* BUY and SELL operations
+* Weighted average cost calculation
+* Atomic database transactions
+
+### Holdings
+
+* Portfolio summary with P&L
+* Uses current market price from database
+
+### SIP (Variant A)
+
+* Create, list, and cancel SIPs
+* Cron job executes SIPs automatically
+* Uses database price for execution
+
+---
+
+## API Endpoints
+
+### 1. Create Portfolio
+
+**POST** `/v1/portfolios`
+
+Request:
+
+```json
+{
+  "clientName": "Badri",
+  "riskProfile": "MODERATE"
+}
+```
+
+---
+
+### 2. Get Portfolio
+
+**GET** `/v1/portfolios/{id}`
+
+---
+
+### 3. Delete Portfolio
+
+**DELETE** `/v1/portfolios/{id}`
+
+---
+
+### 4. Deposit Money
+
+**POST** `/v1/portfolios/{id}/wallet/deposit`
+
+Request:
+
+```json
+{
+  "amount": "50000"
+}
+```
+
+---
+
+### 5. Buy Transaction
+
+**POST** `/v1/portfolios/{id}/transactions/buy`
+
+Request:
+
+```json
+{
+  "symbol": "RELIANCE",
+  "quantity": "5",
+  "price": "2450.0000"
+}
+```
+
+---
+
+### 6. Sell Transaction
+
+**POST** `/v1/portfolios/{id}/transactions/sell`
+
+Request:
+
+```json
+{
+  "symbol": "RELIANCE",
+  "quantity": "2",
+  "price": "2500.0000"
+}
+```
+
+---
+
+### 7. Get Holdings
+
+**GET** `/v1/portfolios/{id}/holdings`
+
+---
+
+### 8. Create SIP
+
+**POST** `/v1/portfolios/{id}/sips`
+
+Request:
+
+```json
+{
+  "symbol": "TCS",
+  "amount": "5000",
+  "cadence": "MONTHLY",
+  "startDate": "2026-05-01"
+}
+```
+
+---
+
+### 9. Get SIPs
+
+**GET** `/v1/portfolios/{id}/sips`
+
+---
+
+### 10. Cancel SIP
+
+**DELETE** `/v1/portfolios/{id}/sips/{sipId}`
+
+---
+
+## One Command to Run
+
+```bash
+docker compose up --build
+```
+
+This command:
+
+* Starts PostgreSQL container
+* Starts Node.js application
+* Runs database migrations automatically
+* Starts the server on port 3000
+
+---
+
+## Setup (Local Development)
+
+```bash
+npm install
+npm run dev
+```
+
+Ensure PostgreSQL is running locally before starting the server.
+
+---
+
+## API Documentation
+
+Swagger UI is available at:
+
+```
+http://localhost:3000/api-docs/
+```
+
+---
+
+## Environment Variables
+
+Create a `.env` file using `.env.example` as a reference.
+
+**Important:** Update the values according to your system configuration.
+
+```env
+PORT=3000
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=portfolio_db
+DB_USER=postgres
+DB_PASSWORD=postgres
+```
+
+---
+
+## Money Math Rule
+
+* All monetary values are stored as NUMERIC(19,4)
+* decimal.js is used to avoid floating point errors
+* Native JavaScript numbers are not used for financial calculations
+
+---
+
+## Trade-offs and Design Decisions
+
+1. Simplicity over complexity
+   Focused on clear and understandable structure rather than over-engineering
+
+2. Knex over ORM
+   Provided better control over SQL queries and easier debugging
+
+3. Basic error handling
+   Used simple error messages for clarity during development
+
+4. Inline Swagger documentation
+   Faster implementation compared to maintaining a separate YAML file
+
+---
+
+## What I’d Do with 2 More Days
+
+1. Improve SIP execution scalability
+   Introduce queue-based processing using BullMQ or Redis
+
+2. Add structured error handling
+   Implement custom error classes with proper HTTP status codes
+
+3. Add integration testing
+   Use Testcontainers to test with real PostgreSQL instances
+
+4. Improve logging and monitoring
+   Add request tracking and performance metrics
+
+5. Production readiness
+   Add environment-based configuration and health check endpoints
+
+---
+
+## Final Note
+
+This project focuses on:
+
+* Accurate financial calculations
+* Clean modular architecture
+* Reproducible setup using Docker
+
+It simulates a real-world backend system used in wealth-tech platforms.
+
+---
+
+Built by
+Badri Narayanan B R
+CSE – KIOT
+BYLD Backend Intern Assignment
