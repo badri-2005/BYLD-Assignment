@@ -317,6 +317,7 @@ Built by
 <br />
 Badri Narayanan B R
 <br />
-Computer Science and Engineering – KIOT
+BYLD Backend Intern Assignment - (Variant A)
 <br />
-BYLD Backend Intern Assignment
+Computer Science and Engineering – KIOT
+
