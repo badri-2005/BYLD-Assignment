@@ -205,6 +205,19 @@ Request:
 
 ---
 
+
+
+## Getting Started
+
+Clone the repository:
+
+```bash
+git clone https://github.com/badri-2005/BYLD-Assignment.git
+cd BYLD-Assignment
+```
+
+---
+
 ## One Command to Run
 
 ```bash
