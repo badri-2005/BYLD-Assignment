@@ -4,12 +4,13 @@ import walletRoutes from './wallet.routes.js';
 // import investmentRoutes from './investment.routes.js';
 import transtactionRoutes from './transaction.routes.js';
 import holdingRoutes from './holdings.routes.js'
+import sipRoutes from './sip.routes.js';
 
 const router = express.Router();
 
 router.use('/v1', portfolioRoutes);
 router.use('/v1', walletRoutes);
-// router.use('/v1', investmentRoutes);
+router.use('/v1', sipRoutes);
 router.use('/v1',transtactionRoutes);
 router.use('/v1',holdingRoutes);
 

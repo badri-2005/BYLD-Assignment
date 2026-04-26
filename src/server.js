@@ -1,6 +1,8 @@
 import app from './app.js'
 import knex from './config/knex.js'
 import dotenv from 'dotenv'
+import { startScheduler } from './config/scheduler.js';
+
 
 dotenv.config()
 
@@ -23,3 +25,4 @@ const startServer = async () => {
 };
 
 startServer();
+startScheduler();
