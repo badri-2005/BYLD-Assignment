@@ -1,6 +1,6 @@
 import * as sipQueries from '../db/sip.queries.js';
 import { getNextRunDate } from '../utils/sipSchedule.js';
-import  buy  from './transaction.service.js';
+import transactionService from './transaction.service.js';
 import knex from '../config/knex.js';
 import Decimal from 'decimal.js';
 
@@ -25,7 +25,7 @@ export const runSipExecutor = async () => {
             const qty = amount.div(price).toFixed(4);
 
             if (new Decimal(portfolio.cash_balance).gte(amount)) {
-                await buy(
+                await transactionService.buy(
                     sip.portfolio_id,
                     sip.symbol,
                     qty,
