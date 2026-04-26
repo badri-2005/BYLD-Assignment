@@ -314,6 +314,6 @@ It simulates a real-world backend system used in wealth-tech platforms.
 ---
 
 Built by
-Badri Narayanan B R
-CSE – KIOT
-BYLD Backend Intern Assignment
+* Badri Narayanan B R
+* CSE – KIOT
+* BYLD Backend Intern Assignment
