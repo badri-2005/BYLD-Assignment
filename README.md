@@ -240,7 +240,7 @@ PORT=3000
 For Docker deployment:
 
 ```bash
-docker compose up --build
+docker compose up 
 ```
 
 This command:
