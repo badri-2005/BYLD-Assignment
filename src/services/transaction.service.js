@@ -39,7 +39,7 @@ const buy = async(portfolioId , symbol , quantity , price)=>{
 
         const balance = new Decimal(portfolio.cash_balance);
 
-        if(totalCost > balance)
+        if(totalCost.gt(balance))
         {
             throw new Error("Insufficient Balance");
         }

@@ -2,6 +2,7 @@ import app from './app.js'
 import knex from './config/knex.js'
 import dotenv from 'dotenv'
 import { startScheduler } from './config/scheduler.js';
+import { json } from 'zod';
 
 
 dotenv.config()
@@ -13,6 +14,7 @@ const startServer = async () => {
         await knex.migrate.latest();
         console.log("Migrations completed");
 
+    
         // Start server
         app.listen(PORT, () => {
             console.log(`Server running on http://localhost:${PORT}`);
