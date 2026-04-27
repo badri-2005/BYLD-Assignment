@@ -233,9 +233,6 @@ DB_USER=postgres
 DB_PASSWORD=your_secure_password
 PORT=3000
 ```
-
-⚠️ **Important**: Never commit `.env` to version control. See [SECURITY.md](SECURITY.md) for security best practices.
-
 ---
 
 ## One Command to Run
@@ -314,7 +311,6 @@ NODE_ENV=development
 - Only `.env.example` is committed (with placeholder values)
 - Each developer creates their own `.env` from `.env.example`
 
-For detailed security guidelines, see [SECURITY.md](SECURITY.md)
 
 ---
 
