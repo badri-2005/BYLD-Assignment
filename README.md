@@ -26,7 +26,7 @@ The focus of this project is correct financial calculations, clean architecture,
 | Validation       | Zod                     |
 | Scheduling       | node-cron               |
 | Containerization | Docker + Docker Compose |
-| API Docs         | Swagger (OpenAPI)       |
+| API Docs         | Swagger                 |
 
 ---
 
