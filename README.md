@@ -302,16 +302,6 @@ DB_PASSWORD=your_secure_password
 NODE_ENV=development
 ```
 
-### Security Best Practices
-
-⚠️ **NEVER commit `.env` to version control**
-
-- The `.env` file contains database credentials and secrets
-- `.gitignore` is configured to exclude `.env` files
-- Only `.env.example` is committed (with placeholder values)
-- Each developer creates their own `.env` from `.env.example`
-
-
 ---
 
 ## Money Math Rule
